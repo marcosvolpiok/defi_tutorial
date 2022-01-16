@@ -71,13 +71,19 @@ class App extends Component {
     }
   }
 
-  stakeTokens = (amount) => {
-    this.setState({ loading: true })
-    this.state.daiToken.methods.approve(this.state.tokenFarm._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.tokenFarm.methods.stakeTokens(amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.setState({ loading: false })
-      })
-    })
+  stakeTokens = async (amount) => {
+    try{
+      this.setState({ loading: true })
+      await this.state.daiToken.methods.approve(this.state.tokenFarm._address, amount).send({ from: this.state.account }) //.on('transactionHash', async (hash) => {
+        await this.state.tokenFarm.methods.stakeTokens(amount).send({ from: this.state.account }) //.on('transactionHash', (hash) => {
+          this.setState({ loading: false })
+        //})
+      //})
+    }catch(e){
+      console.log('Error', e.message);
+      console.log('Error', e);
+      
+    }
   }
 
   unstakeTokens = (amount) => {
